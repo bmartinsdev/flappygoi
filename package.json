@@ -1,0 +1,36 @@
+{
+  "name": "cypress_recorder_extension",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public --no-clear",
+    "deploy": "npm run build && node deploy",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "@tsconfig/svelte": "^3.0.0",
+    "@types/p5": "^1.4.0",
+    "dotenv": "^12.0.3",
+    "node-sass": "^6.0.1",
+    "p5": "^1.4.1",
+    "postcss": "^8.3.6",
+    "postcss-load-config": "^3.1.0",
+    "rollup": "^2.3.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "sirv-cli": "^2.0.0",
+    "svelte": "^3.0.0",
+    "svelte-check": "^2.0.0",
+    "svelte-preprocess": "^4.0.0",
+    "tailwindcss": "^2.2.7",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.0"
+  }
+}
