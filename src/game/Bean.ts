@@ -8,9 +8,10 @@ export class Bean {
 
     lifting = false;
 
-    gravity = 0.3;
+    gravity = 0.2;
     velocity = 0;
-    thrust = -1;
+    thrust = -0.6;
+    maxVelocity = 5;
 
     constructor(p5: P5) {
         this.p5 = p5;
@@ -32,11 +33,11 @@ export class Bean {
         this.velocity += this.gravity;
         this.y += this.velocity;
 
-        if (this.y > window.innerHeight - this.playerBoundary()) {
-            this.y = window.innerHeight - this.playerBoundary();
+        if (this.y > window.innerHeight - this.playerBoundary() - this.height / 2) {
+            this.y = window.innerHeight - this.playerBoundary() - this.height / 2;
             this.velocity = 0;
         }
-        if (this.y <= this.playerBoundary()) {
+        if (this.y < this.playerBoundary()) {
             this.y = this.playerBoundary();
             this.velocity = 0;
         }
@@ -50,7 +51,8 @@ export class Bean {
     }
 
     lift() {
-        this.velocity += this.thrust;
-        console.log(this.velocity);
+        if (this.velocity < this.maxVelocity) {
+            this.velocity += this.thrust;
+        }
     }
 }
