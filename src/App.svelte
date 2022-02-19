@@ -17,6 +17,9 @@
 <div id="game" />
 
 <style lang="scss" global>
+	html {
+		background-color: #eaeff1;
+	}
 	* {
 		margin: 0;
 		padding: 0;
