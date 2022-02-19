@@ -1,5 +1,8 @@
 import type P5 from "p5";
 import { Subscriber } from "./subscriber";
+import { gameEvents } from "./utils";
+
+const scorePoints = 50;
 const clusterCount = 10;
 export class Subscribers {
     p5: P5;
@@ -10,11 +13,12 @@ export class Subscribers {
     constructor(p5: P5, speed) {
         this.p5 = p5;
         this.speed = speed;
-        const randomY = Math.floor(Math.random() * ((window.innerHeight - 140) - 140 + 1) + 140);
+        const randomY = Math.floor(Math.random() * ((p5.height - 140) - 140 + 1) + 140);
+
         if (Math.random() < 0.5) {
             this.spawnLine(randomY)
         } else {
-            if (randomY < window.innerHeight / 2) {
+            if (randomY < p5.height / 2) {
                 this.spawnUpperArc(randomY);
             } else {
                 this.spawnLowerArc(randomY);
@@ -56,7 +60,7 @@ export class Subscribers {
     checkCollisions(pos: P5.Vector) {
         for (const subscriber of this.subscribers) {
             if (subscriber.hits(pos)) {
-                subscriber.destroy();
+                gameEvents.updateScore(scorePoints);
             }
         }
     }

@@ -19,7 +19,7 @@ export class Bean {
     }
 
     spawn() {
-        this.pos = new Vector(window.innerHeight / 4, window.innerWidth / 2);
+        this.pos = new Vector(this.p5.width / 4, this.p5.height / 4);
     }
 
     show() {
@@ -32,8 +32,8 @@ export class Bean {
         this.velocity += this.gravity;
         this.pos.y += this.velocity;
 
-        if (this.pos.y > window.innerHeight + this.playerBoundary() - this.height) {
-            this.pos.y = window.innerHeight + this.playerBoundary() - this.height;
+        if (this.pos.y > this.p5.height + this.playerBoundary() - this.height) {
+            this.pos.y = this.p5.height + this.playerBoundary() - this.height;
             this.velocity = 0;
         }
         if (this.pos.y < this.playerBoundary()) {
@@ -43,6 +43,7 @@ export class Bean {
         if (this.p5.mouseIsPressed) {
             this.lift();
         }
+        this.show();
     }
 
     playerBoundary() {

@@ -4,7 +4,7 @@ export class Subscriber {
     height = 30;
     width = 30;
     pos: P5.Vector;
-    triggered: false;
+    hit = false;
     color = '#000000';
 
     speed = 2;
@@ -16,9 +16,11 @@ export class Subscriber {
     }
 
     show() {
-        this.p5.noStroke();
-        this.p5.fill(this.color);
-        this.p5.ellipse(this.pos.x, this.pos.y, this.width, this.height);
+        if (!this.hit) {
+            this.p5.noStroke();
+            this.p5.fill(this.color);
+            this.p5.ellipse(this.pos.x, this.pos.y, this.width, this.height);
+        }
     }
 
     update() {
@@ -26,10 +28,11 @@ export class Subscriber {
     }
 
     hits(targetPos: P5.Vector): Boolean {
-        return P5.Vector.dist(this.pos, targetPos) < 60;
-    }
+        if (!this.hit && P5.Vector.dist(this.pos, targetPos) < 45) {
+            this.hit = true;
+            return true;
+        }
 
-    destroy() {
-        this.color = 'grey';
+        return false;
     }
 }

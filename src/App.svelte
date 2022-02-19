@@ -22,6 +22,11 @@
 		padding: 0;
 		box-sizing: border-box;
 	}
+	#game {
+		height: 100vh;
+		display: flex;
+		align-items: center;
+	}
 	canvas {
 		display: block;
 		width: 100%;
