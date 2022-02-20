@@ -15,7 +15,7 @@ export const gameSize = () => {
 class Subject {
     updateScore: CallableFunction;
     updateLives: CallableFunction;
-    bean: CallableFunction;
+    beanActions: CallableFunction;
 }
 export const gameEvents = new Subject();
 

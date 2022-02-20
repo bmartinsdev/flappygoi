@@ -1,4 +1,5 @@
 import type P5 from "p5";
+import { KBeanActions } from "./bean";
 import { Subscriber } from "./subscriber";
 import { gameEvents, randomBoolean, randomNumberBetween } from "./utils";
 
@@ -61,6 +62,7 @@ export class Subscribers {
     checkCollisions(pos: P5.Vector) {
         for (const subscriber of this.subscribers) {
             if (subscriber.hits(pos)) {
+                gameEvents.beanActions(KBeanActions.SUBSCRIBED);
                 gameEvents.updateScore(scorePoints);
             }
         }
