@@ -3,7 +3,7 @@ import 'p5/lib/addons/p5.sound';
 import { Bean } from './objects/bean';
 import { ScoreBoard } from "./ui/score";
 import { Subscribers } from "./objects/subscribers";
-import { gameSize } from "./shared/utils";
+import { gameEvents, gameSize } from "./shared/utils";
 import { Spam } from './objects/spam';
 
 export const sketch = function (p5: P5) {
@@ -29,6 +29,12 @@ export const sketch = function (p5: P5) {
                     unsubscribed: p5.loadImage('assets/sprites/bean/hit.png'),
                     jump: p5.loadImage('assets/sprites/bean/jump.png')
                 }
+            },
+            spam: {
+                sprite: p5.loadImage('assets/sprites/spam.png')
+            },
+            subscriber: {
+                sprite: p5.loadImage('assets/sprites/subscriber.png')
             }
         }
         assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_01.png'));
@@ -42,14 +48,9 @@ export const sketch = function (p5: P5) {
         scoreBoard = new ScoreBoard(p5);
 
         bean = new Bean(p5, assets.bean);
-        subscribers = new Subscribers(p5, speed);
+        subscribers = new Subscribers(p5, speed, assets.subscriber);
 
-        spam = new Spam(p5, speed / 2);
-
-        window.onresize = (e: UIEvent) => {
-            p5.resizeCanvas(gameSize().width, gameSize().height);
-            bean.spawn();
-        }
+        spam = new Spam(p5, speed / 2, assets.spam);
     }
 
     p5.draw = function () {
@@ -62,7 +63,7 @@ export const sketch = function (p5: P5) {
                 speed += 0.7;
             }
 
-            subscribers = new Subscribers(p5, speed);
+            subscribers = new Subscribers(p5, speed, assets.subscriber);
         } else {
             subscribers.show();
         }
@@ -74,7 +75,7 @@ export const sketch = function (p5: P5) {
                 spam.speed += 0.7;
             }
 
-            spam = new Spam(p5, spam.speed);
+            spam = new Spam(p5, spam.speed, assets.spam);
         } else {
             spam.update();
         }
@@ -85,5 +86,20 @@ export const sketch = function (p5: P5) {
 
         subscribers.checkCollisions(bean.pos);
         spam.checkCollision(bean.pos);
+
+        if (bean.dead && bean.toIdle <= 0) {
+            p5.noLoop();
+        }
+    }
+
+    // Handle stop event
+    gameEvents.stop = () => {
+        bean.death();
+    }
+
+    // Handle window resize
+    window.onresize = (e: UIEvent) => {
+        p5.resizeCanvas(gameSize().width, gameSize().height);
+        bean.spawn();
     }
 }

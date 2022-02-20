@@ -17,7 +17,7 @@ export class ScoreBoard {
         };
         gameEvents.updateLives = (life: number) => {
             this.lives += life;
-            if (this.lives === 0) this.p5.noLoop();
+            if (this.lives === 0) gameEvents.stop();
         }
     }
 

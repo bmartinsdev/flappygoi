@@ -4,22 +4,22 @@ export class Subscriber {
     height = 30;
     width = 30;
     pos: P5.Vector;
+    subscriberAnimation: P5.Image;
     hit = false;
     color = '#000000';
 
     speed = 2;
 
-    constructor(p5: P5, x: number, y: number, speed: number) {
+    constructor(p5: P5, x: number, y: number, speed: number, assets) {
         this.p5 = p5;
         this.pos = new Vector(x, y);
         this.speed = speed;
+        this.subscriberAnimation = assets.sprite;
     }
 
     show() {
         if (!this.hit) {
-            this.p5.noStroke();
-            this.p5.fill(this.color);
-            this.p5.ellipse(this.pos.x, this.pos.y, this.width, this.height);
+            this.p5.image(this.subscriberAnimation, this.pos.x, this.pos.y);
         }
     }
 

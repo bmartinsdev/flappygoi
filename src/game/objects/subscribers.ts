@@ -9,11 +9,13 @@ export class Subscribers {
     p5: P5;
     subscribers: Subscriber[] = [];
     speed: number;
+    assets;
     x: number;
 
-    constructor(p5: P5, speed) {
+    constructor(p5: P5, speed, assets) {
         this.p5 = p5;
         this.speed = speed;
+        this.assets = assets;
         this.x = p5.width + 100;
         const randomY = randomNumberBetween(140, p5.height - 280);
 
@@ -30,20 +32,20 @@ export class Subscribers {
 
     spawnLine(randomY): void {
         for (let i = 0; i < clusterCount; i++) {
-            this.subscribers.push(new Subscriber(this.p5, this.x + 60 * i, randomY, this.speed));
+            this.subscribers.push(new Subscriber(this.p5, this.x + 60 * i, randomY, this.speed, this.assets));
         }
     }
 
     spawnUpperArc(randomY): void {
         for (let i = 0; i < clusterCount; i++) {
-            this.subscribers.push(new Subscriber(this.p5, this.x + 60 * i, randomY, this.speed));
+            this.subscribers.push(new Subscriber(this.p5, this.x + 60 * i, randomY, this.speed, this.assets));
             randomY = randomY - 20 + i * 2;
         }
     }
 
     spawnLowerArc(randomY): void {
         for (let i = 0; i < clusterCount; i++) {
-            this.subscribers.push(new Subscriber(this.p5, this.x + 60 * i, randomY, this.speed));
+            this.subscribers.push(new Subscriber(this.p5, this.x + 60 * i, randomY, this.speed, this.assets));
             randomY = randomY + 20 - i * 2;
         }
     }

@@ -23,6 +23,7 @@ export class Bean {
     toIdle = 0;
 
     lifting = false;
+    dead = false;
 
     gravity = 0.5;
     velocity = 0;
@@ -90,14 +91,22 @@ export class Bean {
             this.pos.y = this.playerBoundary();
             this.velocity = 0;
         }
-        if (this.p5.mouseIsPressed) {
-            this.lift();
+        if (!this.dead) {
+            if (this.p5.mouseIsPressed) {
+                this.lift();
+            }
         }
         this.show();
     }
 
     playerBoundary() {
         return this.height / 2
+    }
+
+    death() {
+        this.dead = true;
+        this.state = KBeanActions.UNSUBSCRIBED;
+        this.toIdle = 50;
     }
 
     lift() {

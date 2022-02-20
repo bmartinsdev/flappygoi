@@ -13,6 +13,7 @@ export const gameSize = () => {
 };
 
 class Subject {
+    stop: CallableFunction;
     updateScore: CallableFunction;
     updateLives: CallableFunction;
     beanActions: CallableFunction;
