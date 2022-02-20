@@ -1,5 +1,6 @@
 import P5, { Vector } from "p5";
-import { gameEvents, randomNumberBetween } from "./utils";
+import { gameEvents, randomNumberBetween } from "../shared/utils";
+import { KBeanActions } from "./bean";
 
 enum Orientation {
     UP = 'up',
@@ -55,6 +56,7 @@ export class Spam {
     checkCollision(targetPos: P5.Vector): Boolean {
         if (!this.hit && P5.Vector.dist(this.pos, targetPos) < 45) {
             this.hit = true;
+            gameEvents.beanActions(KBeanActions.UNSUBSCRIBED);
             gameEvents.updateLives(-1);
             return true;
         }

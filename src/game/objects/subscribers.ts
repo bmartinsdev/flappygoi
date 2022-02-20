@@ -1,7 +1,7 @@
 import type P5 from "p5";
 import { KBeanActions } from "./bean";
 import { Subscriber } from "./subscriber";
-import { gameEvents, randomBoolean, randomNumberBetween } from "./utils";
+import { gameEvents, randomBoolean, randomNumberBetween } from "../shared/utils";
 
 const scorePoints = 50;
 const clusterCount = 10;

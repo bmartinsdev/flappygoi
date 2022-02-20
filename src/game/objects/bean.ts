@@ -1,6 +1,7 @@
 import type P5 from "p5";
 import { Vector } from "p5";
-import { gameEvents } from "./utils";
+import { Sprite } from "../shared/sprite";
+import { gameEvents } from "../shared/utils";
 
 export enum KBeanActions {
     JUMP,
@@ -12,8 +13,11 @@ export enum KBeanActions {
 export class Bean {
     p5: P5;
     height = 80;
-    width = 60;
+    width = 56;
     pos: P5.Vector;
+    idleAnimation: Sprite;
+    jumpAnimation: P5.Image;
+    unsubscribedAnimation: P5.Image;
     assets;
     state: KBeanActions = KBeanActions.IDLE;
     toIdle = 0;
@@ -30,19 +34,21 @@ export class Bean {
         this.assets = assets;
         this.spawn();
         this.subscribe();
+        this.idleAnimation = new Sprite(assets.sprites.idle, this.p5);
+        this.jumpAnimation = assets.sprites.jump;
+        this.unsubscribedAnimation = assets.sprites.unsubscribed;
     }
 
     subscribe() {
         gameEvents.beanActions = (type: KBeanActions) => {
             this.state = type;
-            this.toIdle = 5;
             switch (this.state) {
-                case KBeanActions.JUMP:
-                    break;
                 case KBeanActions.SUBSCRIBED:
                     this.assets.sounds.subscribe.play();
                     break;
                 case KBeanActions.UNSUBSCRIBED:
+                    this.assets.sounds.unsubscribe.play();
+                    this.toIdle = 30;
                     break;
             }
         };
@@ -56,21 +62,19 @@ export class Bean {
         this.p5.noStroke();
         if (this.toIdle < 0) this.state = KBeanActions.IDLE;
 
+        this.p5.imageMode(this.p5.CENTER);
         switch (this.state) {
             case KBeanActions.IDLE:
-                this.p5.fill('#04afdb');
+            case KBeanActions.SUBSCRIBED:
+                this.idleAnimation.play(this.pos);
                 break;
             case KBeanActions.JUMP:
-                this.p5.fill('#95a4ff');
-                break;
-            case KBeanActions.SUBSCRIBED:
-                this.p5.fill('#95e1ff');
+                this.p5.image(this.jumpAnimation, this.pos.x, this.pos.y);
                 break;
             case KBeanActions.UNSUBSCRIBED:
-                this.p5.fill('#ff9595');
+                this.p5.image(this.unsubscribedAnimation, this.pos.x, this.pos.y);
                 break;
         }
-        this.p5.ellipse(this.pos.x, this.pos.y, this.width, this.height);
         this.toIdle--;
     }
 
@@ -97,9 +101,9 @@ export class Bean {
     }
 
     lift() {
-        if (!(this.state in [KBeanActions.SUBSCRIBED, KBeanActions.UNSUBSCRIBED])) {
-            this.state = KBeanActions.JUMP;
+        if (this.state !== KBeanActions.UNSUBSCRIBED) {
             this.toIdle = 10;
+            this.state = KBeanActions.JUMP;
         }
         this.velocity += this.thrust;
     }

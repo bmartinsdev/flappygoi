@@ -1,10 +1,10 @@
 import type P5 from "p5";
 import 'p5/lib/addons/p5.sound';
-import { Bean } from './bean';
-import { ScoreBoard } from "./score";
-import { Subscribers } from "./subscribers";
-import { gameSize } from "./utils";
-import { Spam } from './spam';
+import { Bean } from './objects/bean';
+import { ScoreBoard } from "./ui/score";
+import { Subscribers } from "./objects/subscribers";
+import { gameSize } from "./shared/utils";
+import { Spam } from './objects/spam';
 
 export const sketch = function (p5: P5) {
     let bean: Bean;
@@ -21,10 +21,19 @@ export const sketch = function (p5: P5) {
         assets = {
             bean: {
                 sounds: {
-                    subscribe: p5.loadSound('assets/sound/subscribe.ogg')
+                    subscribe: p5.loadSound('assets/sound/subscribe.ogg'),
+                    unsubscribe: p5.loadSound('assets/sound/unsubscribe.ogg')
+                },
+                sprites: {
+                    idle: [],
+                    unsubscribed: p5.loadImage('assets/sprites/bean/hit.png'),
+                    jump: p5.loadImage('assets/sprites/bean/jump.png')
                 }
             }
         }
+        assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_01.png'));
+        assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_02.png'));
+        assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_03.png'));
     }
 
     p5.setup = function () {
