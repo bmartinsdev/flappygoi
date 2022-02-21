@@ -42,6 +42,7 @@ export class Bean {
 
     subscribe() {
         gameEvents.beanActions = (type: KBeanActions) => {
+            if (this.dead) return;
             this.state = type;
             switch (this.state) {
                 case KBeanActions.SUBSCRIBED:
@@ -61,7 +62,7 @@ export class Bean {
 
     show() {
         this.p5.noStroke();
-        if (this.toIdle < 0) this.state = KBeanActions.IDLE;
+        if (this.toIdle < 0 && !this.dead) this.state = KBeanActions.IDLE;
 
         this.p5.imageMode(this.p5.CENTER);
         switch (this.state) {
@@ -92,7 +93,7 @@ export class Bean {
             this.velocity = 0;
         }
         if (!this.dead) {
-            if (this.p5.mouseIsPressed) {
+            if (this.p5.mouseIsPressed || this.p5.keyIsDown(this.p5.UP_ARROW)) {
                 this.lift();
             }
         }

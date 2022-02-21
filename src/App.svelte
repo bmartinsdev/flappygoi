@@ -18,7 +18,7 @@
 
 <style lang="scss" global>
 	html {
-		background-color: #eaeff1;
+		background-color: #e1e6e8;
 	}
 	* {
 		margin: 0;
@@ -26,13 +26,13 @@
 		box-sizing: border-box;
 	}
 	#game {
-		height: 100vh;
+		height: 100%;
 		display: flex;
-		align-items: center;
+		align-items: bottom;
 	}
 	canvas {
 		display: block;
 		width: 100%;
-		height: 100vh;
+		height: 100%;
 	}
 </style>

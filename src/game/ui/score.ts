@@ -25,7 +25,7 @@ export class ScoreBoard {
         this.p5.textSize(20);
         this.p5.fill("#000");
         this.p5.textAlign(this.p5.RIGHT);
-        this.p5.text(`${this.score} pts`, this.p5.width - 30, 80);
+        this.p5.text(`${this.score} subs`, this.p5.width - 30, 80);
         this.p5.text(`${this.lives} lives`, this.p5.width - 30, 60);
     }
 

@@ -5,10 +5,12 @@ import { ScoreBoard } from "./ui/score";
 import { Subscribers } from "./objects/subscribers";
 import { gameEvents, gameSize } from "./shared/utils";
 import { Spam } from './objects/spam';
+import { Background } from "./objects/background";
 
 export const sketch = function (p5: P5) {
     let bean: Bean;
     let spam: Spam;
+    let background: Background;
     let subscribers: Subscribers;
     let scoreBoard: ScoreBoard;
     let assets: any = {
@@ -35,6 +37,9 @@ export const sketch = function (p5: P5) {
             },
             subscriber: {
                 sprite: p5.loadImage('assets/sprites/subscriber.png')
+            },
+            background: {
+                sprite: p5.loadImage('assets/sprites/background.png')
             }
         }
         assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_01.png'));
@@ -51,10 +56,11 @@ export const sketch = function (p5: P5) {
         subscribers = new Subscribers(p5, speed, assets.subscriber);
 
         spam = new Spam(p5, speed / 2, assets.spam);
+        background = new Background(p5, speed / 2, assets.background);
     }
 
     p5.draw = function () {
-        p5.background('#eaeff1');
+        background.update();
 
         // If subscribers is off the screen, replace with new one.
         // Else draw
