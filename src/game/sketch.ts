@@ -14,54 +14,89 @@ export const sketch = function (p5: P5) {
     let subscribers: Subscribers;
     let scoreBoard: ScoreBoard;
     let assets: any = {
-
+        bean: {
+            sounds: {
+                subscribe: null,
+                unsubscribe: null
+            },
+            sprites: {
+                idle: [],
+                unsubscribed: null,
+                jump: null
+            }
+        },
+        spam: {
+            sprite: null
+        },
+        subscriber: {
+            sprite: null
+        },
+        background: {
+            sprite: null
+        }
     };
     let speed = 8;
     let maxSpeed = 14;
+    let play = false;
 
-    p5.preload = function () {
+    async function loadAssets() {
+        console.log("preload started");
+        const loaders = [];
+
         // @ts-ignore Wrong parameter format on ts type
         p5.soundFormats('ogg', 'mp3');
-        assets = {
-            bean: {
-                sounds: {
-                    subscribe: p5.loadSound('assets/sound/subscribe.ogg'),
-                    unsubscribe: p5.loadSound('assets/sound/unsubscribe.ogg')
-                },
-                sprites: {
-                    idle: [],
-                    unsubscribed: p5.loadImage('assets/sprites/bean/hit.png'),
-                    jump: p5.loadImage('assets/sprites/bean/jump.png')
-                }
-            },
-            spam: {
-                sprite: p5.loadImage('assets/sprites/spam.png')
-            },
-            subscriber: {
-                sprite: p5.loadImage('assets/sprites/subscriber.png')
-            },
-            background: {
-                sprite: p5.loadImage('assets/sprites/background.png')
-            }
+        loaders.push(new Promise((resolve, reject) => {
+            assets.bean.sounds.subscribe = p5.loadSound('assets/sound/subscribe.ogg', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.bean.sounds.unsubscribe = p5.loadSound('assets/sound/unsubscribe.ogg', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.bean.sprites.unsubscribed = p5.loadImage('assets/sprites/bean/hit.png', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.bean.sprites.jump = p5.loadImage('assets/sprites/bean/jump.png', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.spam.sprite = p5.loadImage('assets/sprites/spam.png', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.subscriber.sprite = p5.loadImage('assets/sprites/subscriber.png', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.background.sprite = p5.loadImage('assets/sprites/background.png', resolve, reject);
+        }));
+        for (let i = 1; i <= 3; i++) {
+            loaders.push(new Promise((resolve, reject) => {
+                assets.bean.sprites.idle.push(p5.loadImage(`assets/sprites/bean/idle_0${i}.png`, resolve, reject));
+            }));
         }
-        assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_01.png'));
-        assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_02.png'));
-        assets.bean.sprites.idle.push(p5.loadImage('assets/sprites/bean/idle_03.png'));
+
+        return Promise.all(loaders);
     }
 
     p5.setup = function () {
-        const canvas = p5.createCanvas(gameSize().width, gameSize().height);
-        canvas.parent('game');
-        scoreBoard = new ScoreBoard(p5);
+        p5.noLoop();
+        loadAssets().then(() => {
+            const canvas = p5.createCanvas(gameSize().width, gameSize().height);
+            canvas.parent('game');
 
-        bean = new Bean(p5, assets.bean);
-        subscribers = new Subscribers(p5, speed, assets.subscriber);
+            document.getElementById('preloader').classList.add('hidden');
 
-        spam = new Spam(p5, speed / 2, assets.spam);
-        background = new Background(p5, speed / 2, assets.background);
+            scoreBoard = new ScoreBoard(p5);
+
+            bean = new Bean(p5, assets.bean);
+            subscribers = new Subscribers(p5, speed, assets.subscriber);
+
+            spam = new Spam(p5, speed / 2, assets.spam);
+            background = new Background(p5, speed / 2, assets.background);
+            p5.loop();
+            play = true;
+        });
     }
 
     p5.draw = function () {
+        if (!play) return;
         background.update();
 
         // If subscribers is off the screen, replace with new one.
