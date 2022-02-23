@@ -20,6 +20,8 @@ export const sketch = function (p5: P5) {
     let maxSpeed = 14;
 
     p5.preload = function () {
+        // @ts-ignore Wrong parameter format on ts type
+        p5.soundFormats('ogg', 'mp3');
         assets = {
             bean: {
                 sounds: {
