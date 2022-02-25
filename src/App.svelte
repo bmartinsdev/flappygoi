@@ -7,6 +7,7 @@
 	onMount(() => {
 		game = new P5(sketch);
 		window.onresize = onWindowResize;
+		document.oncontextmenu = () => false;
 	});
 
 	function onWindowResize(e: UIEvent) {
