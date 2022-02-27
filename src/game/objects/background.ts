@@ -4,13 +4,12 @@ export class Background {
     p5: P5;
     backgroundAnimation: P5.Image;
     x: number = 0;
-    speed = 0.3;
+    speed = 4;
     height = () => this.p5.height / 1.4;
     width: number;
 
-    constructor(p5: P5, speed: number, assets) {
+    constructor(p5: P5, assets) {
         this.p5 = p5;
-        this.speed = speed;
         this.width = 1800;
         this.backgroundAnimation = assets.sprite;
     }

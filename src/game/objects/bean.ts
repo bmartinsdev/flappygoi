@@ -18,6 +18,7 @@ export class Bean {
     idleAnimation: Sprite;
     jumpAnimation: P5.Image;
     unsubscribedAnimation: P5.Image;
+    subscribedAnimation: P5.Image;
     assets;
     state: KBeanActions = KBeanActions.IDLE;
     toIdle = 0;
@@ -35,7 +36,8 @@ export class Bean {
         this.assets = assets;
         this.spawn();
         this.subscribe();
-        this.idleAnimation = new Sprite(assets.sprites.idle, this.p5);
+        this.idleAnimation = new Sprite(assets.sprites.idle, this.p5, this.width, this.height);
+        this.subscribedAnimation = assets.sprites.subscribe;
         this.jumpAnimation = assets.sprites.jump;
         this.unsubscribedAnimation = assets.sprites.unsubscribed;
     }
@@ -47,6 +49,7 @@ export class Bean {
             switch (this.state) {
                 case KBeanActions.SUBSCRIBED:
                     this.assets.sounds.subscribe.play();
+                    this.toIdle = 10;
                     break;
                 case KBeanActions.UNSUBSCRIBED:
                     this.assets.sounds.unsubscribe.play();
@@ -57,24 +60,27 @@ export class Bean {
     }
 
     spawn() {
-        this.pos = new Vector(this.p5.width / 4, this.p5.height / 4);
+        this.dead = false;
+        this.pos = new Vector(-100, this.p5.height);
     }
 
     show() {
         this.p5.noStroke();
-        if (this.toIdle < 0 && !this.dead) this.state = KBeanActions.IDLE;
+        if (!this.toIdle && !this.dead) this.state = KBeanActions.IDLE;
 
         this.p5.imageMode(this.p5.CENTER);
         switch (this.state) {
             case KBeanActions.IDLE:
-            case KBeanActions.SUBSCRIBED:
                 this.idleAnimation.play(this.pos);
                 break;
+            case KBeanActions.SUBSCRIBED:
+                this.p5.image(this.subscribedAnimation, this.pos.x, this.pos.y, this.width, this.height);
+                break;
             case KBeanActions.JUMP:
-                this.p5.image(this.jumpAnimation, this.pos.x, this.pos.y);
+                this.p5.image(this.jumpAnimation, this.pos.x, this.pos.y, this.width, this.height);
                 break;
             case KBeanActions.UNSUBSCRIBED:
-                this.p5.image(this.unsubscribedAnimation, this.pos.x, this.pos.y);
+                this.p5.image(this.unsubscribedAnimation, this.pos.x, this.pos.y, this.width, this.height);
                 break;
         }
         this.toIdle--;
@@ -83,6 +89,9 @@ export class Bean {
     update() {
         this.velocity += this.gravity;
         this.pos.y += this.velocity;
+        if (this.pos.x < this.p5.width / 5) {
+            this.pos.x += this.maxVelocity;
+        }
 
         if (this.pos.y > this.p5.height + this.playerBoundary() - this.height) {
             this.pos.y = this.p5.height + this.playerBoundary() - this.height;
@@ -111,7 +120,7 @@ export class Bean {
     }
 
     lift() {
-        if (this.state !== KBeanActions.UNSUBSCRIBED) {
+        if (!(this.state in [KBeanActions.UNSUBSCRIBED, KBeanActions.SUBSCRIBED])) {
             this.toIdle = 10;
             this.state = KBeanActions.JUMP;
         }

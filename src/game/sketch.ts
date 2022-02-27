@@ -6,11 +6,13 @@ import { Subscribers } from "./objects/subscribers";
 import { gameEvents, gameSize } from "./shared/utils";
 import { Spam } from './objects/spam';
 import { Background } from "./objects/background";
+import { Game, KStates } from "./ui/game";
 
 export const sketch = function (p5: P5) {
     let bean: Bean;
     let spam: Spam;
     let background: Background;
+    let game: Game;
     let subscribers: Subscribers;
     let scoreBoard: ScoreBoard;
     let assets: any = {
@@ -22,6 +24,7 @@ export const sketch = function (p5: P5) {
             sprites: {
                 idle: [],
                 unsubscribed: null,
+                subscribe: null,
                 jump: null
             }
         },
@@ -35,12 +38,100 @@ export const sketch = function (p5: P5) {
             sprite: null
         }
     };
-    let speed = 8;
-    let maxSpeed = 14;
-    let play = false;
+
+    p5.setup = function () {
+        p5.noLoop();
+        game = new Game(p5);
+        loadAssets().then(() => {
+            const canvas = p5.createCanvas(gameSize().width, gameSize().height);
+            canvas.parent('game');
+
+            document.getElementById('preloader').classList.add('hidden');
+
+            scoreBoard = new ScoreBoard(p5);
+
+            bean = new Bean(p5, assets.bean);
+            subscribers = new Subscribers(p5, game.speed.subscribers.current, assets.subscriber);
+
+            spam = new Spam(p5, game.speed.spam.current, assets.spam);
+            background = new Background(p5, assets.background);
+            p5.loop();
+            game.setState(KStates.START);
+        });
+    }
+
+    p5.draw = function () {
+        switch (game.getState()) {
+            case KStates.LOADING:
+                return;
+            case KStates.START:
+                game.renderStartScreen(background);
+                break;
+            case KStates.END:
+                game.renderRestartScreen(background, scoreBoard, bean);
+                break;
+            case KStates.RUNNING:
+                renderGame();
+                break;
+        }
+    }
+
+    // Handle stop event
+    gameEvents.stop = () => {
+        bean.death();
+    }
+
+    // Handle window resize
+    window.onresize = (e: UIEvent) => {
+        p5.resizeCanvas(gameSize().width, gameSize().height);
+        bean.spawn();
+    }
+
+    // Render game
+    function renderGame() {
+        background.update();
+
+        // If subscribers is off the screen, replace with new one.
+        // Else draw
+        if (subscribers.getPos() < 0) {
+            if (game.speed.subscribers.current < game.speed.subscribers.max) {
+                game.speed.subscribers.current += game.speed.subscribers.inc;
+            }
+
+            subscribers = new Subscribers(p5, game.speed.subscribers.current, assets.subscriber);
+        } else {
+            subscribers.show();
+        }
+
+        // If subscribers is off the screen, replace with new one.
+        // Else draw
+        if (spam.getPos() < -200) {
+            if (game.speed.spam.current < game.speed.spam.max) {
+                game.speed.spam.current += game.speed.spam.inc;
+            }
+
+            spam = new Spam(p5, game.speed.spam.current, assets.spam);
+        } else {
+            spam.update();
+        }
+
+        bean.update();
+
+        scoreBoard.update();
+
+        // Don't check collision if player is dead
+        if (!bean.dead) {
+            subscribers.checkCollisions(bean.pos);
+            spam.checkCollision(bean.pos);
+        }
+
+        // If death animation ended, set END state
+        if (bean.dead && bean.toIdle <= 0) {
+            game.setState(KStates.END);
+        }
+    }
 
     async function loadAssets() {
-        console.log("preload started");
         const loaders = [];
 
         // @ts-ignore Wrong parameter format on ts type
@@ -53,6 +144,9 @@ export const sketch = function (p5: P5) {
         }));
         loaders.push(new Promise((resolve, reject) => {
             assets.bean.sprites.unsubscribed = p5.loadImage('assets/sprites/bean/hit.png', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.bean.sprites.subscribe = p5.loadImage('assets/sprites/bean/eat.png', resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
             assets.bean.sprites.jump = p5.loadImage('assets/sprites/bean/jump.png', resolve, reject);
@@ -73,76 +167,5 @@ export const sketch = function (p5: P5) {
         }
 
         return Promise.all(loaders);
-    }
-
-    p5.setup = function () {
-        p5.noLoop();
-        loadAssets().then(() => {
-            const canvas = p5.createCanvas(gameSize().width, gameSize().height);
-            canvas.parent('game');
-
-            document.getElementById('preloader').classList.add('hidden');
-
-            scoreBoard = new ScoreBoard(p5);
-
-            bean = new Bean(p5, assets.bean);
-            subscribers = new Subscribers(p5, speed, assets.subscriber);
-
-            spam = new Spam(p5, speed / 2, assets.spam);
-            background = new Background(p5, speed / 2, assets.background);
-            p5.loop();
-            play = true;
-        });
-    }
-
-    p5.draw = function () {
-        if (!play) return;
-        background.update();
-
-        // If subscribers is off the screen, replace with new one.
-        // Else draw
-        if (subscribers.getPos() < 0) {
-            if (speed < maxSpeed) {
-                speed += 0.7;
-            }
-
-            subscribers = new Subscribers(p5, speed, assets.subscriber);
-        } else {
-            subscribers.show();
-        }
-
-        // If subscribers is off the screen, replace with new one.
-        // Else draw
-        if (spam.getPos() < -200) {
-            if (spam.speed < maxSpeed) {
-                spam.speed += 0.7;
-            }
-
-            spam = new Spam(p5, spam.speed, assets.spam);
-        } else {
-            spam.update();
-        }
-
-        bean.update();
-
-        scoreBoard.update();
-
-        subscribers.checkCollisions(bean.pos);
-        spam.checkCollision(bean.pos);
-
-        if (bean.dead && bean.toIdle <= 0) {
-            p5.noLoop();
-        }
-    }
-
-    // Handle stop event
-    gameEvents.stop = () => {
-        bean.death();
-    }
-
-    // Handle window resize
-    window.onresize = (e: UIEvent) => {
-        p5.resizeCanvas(gameSize().width, gameSize().height);
-        bean.spawn();
     }
 }

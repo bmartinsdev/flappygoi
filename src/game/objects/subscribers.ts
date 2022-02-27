@@ -12,7 +12,7 @@ export class Subscribers {
     assets;
     x: number;
 
-    constructor(p5: P5, speed, assets) {
+    constructor(p5: P5, speed: number, assets) {
         this.p5 = p5;
         this.speed = speed;
         this.assets = assets;

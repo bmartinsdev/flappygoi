@@ -2,7 +2,7 @@ import P5, { Vector } from "p5";
 import { gameEvents, randomNumberBetween } from "../shared/utils";
 import { KBeanActions } from "./bean";
 
-enum Orientation {
+enum KOrientation {
     UP = 'up',
     DOWN = 'down'
 };
@@ -17,15 +17,15 @@ export class Spam {
     spamAnimation: P5.Image;
     direction = {
         interval: this.zigZagInterval,
-        orientation: Orientation.UP
+        orientation: KOrientation.UP
     }
-    speed = 0.3;
+    speed: number;
 
     constructor(p5: P5, speed: number, assets) {
         this.p5 = p5;
-        this.pos = new Vector(p5.width + 100, randomNumberBetween(140, p5.height - 280));
         this.speed = speed;
-        this.zigZagInterval = randomNumberBetween(50, 150);
+        this.pos = new Vector(p5.width + 100, randomNumberBetween(140, p5.height - 280));
+        this.zigZagInterval = randomNumberBetween(50, 500);
         this.spamAnimation = assets.sprite;
     }
 
@@ -39,11 +39,11 @@ export class Spam {
         this.pos.x -= this.speed;
 
         if (this.direction.interval < 0) {
-            this.direction.orientation = this.direction.orientation === Orientation.UP ? Orientation.DOWN : Orientation.UP;
+            this.direction.orientation = this.direction.orientation === KOrientation.UP ? KOrientation.DOWN : KOrientation.UP;
             this.direction.interval = this.zigZagInterval;
         }
 
-        this.pos.y += this.direction.orientation === Orientation.UP ? 1 : -1;
+        this.pos.y += this.direction.orientation === KOrientation.UP ? 1 : -1;
         this.direction.interval--;
 
         this.show();

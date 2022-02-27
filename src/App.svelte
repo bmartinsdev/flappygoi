@@ -35,5 +35,7 @@
 		display: block;
 		width: 100%;
 		height: 100%;
+		max-height: 800px;
+		max-width: 1300px;
 	}
 </style>
