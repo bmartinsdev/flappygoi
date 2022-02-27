@@ -36,6 +36,11 @@ export const sketch = function (p5: P5) {
         },
         background: {
             sprite: null
+        },
+        ui: {
+            sprites: {
+                life: null
+            }
         }
     };
 
@@ -48,7 +53,9 @@ export const sketch = function (p5: P5) {
 
             document.getElementById('preloader').classList.add('hidden');
 
-            scoreBoard = new ScoreBoard(p5);
+            p5.imageMode(p5.CENTER);
+
+            scoreBoard = new ScoreBoard(p5, assets.ui.sprites.life, assets.subscriber.sprite);
 
             bean = new Bean(p5, assets.bean);
             subscribers = new Subscribers(p5, game.speed.subscribers.current, assets.subscriber);
@@ -153,6 +160,9 @@ export const sketch = function (p5: P5) {
         }));
         loaders.push(new Promise((resolve, reject) => {
             assets.spam.sprite = p5.loadImage('assets/sprites/spam.png', resolve, reject);
+        }));
+        loaders.push(new Promise((resolve, reject) => {
+            assets.ui.sprites.life = p5.loadImage('assets/sprites/life.png', resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
             assets.subscriber.sprite = p5.loadImage('assets/sprites/subscriber.png', resolve, reject);

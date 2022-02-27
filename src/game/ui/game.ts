@@ -7,7 +7,7 @@ export enum KStates {
     LOADING,
     RUNNING,
     START,
-    DEAD
+    END
 }
 
 export class Game {

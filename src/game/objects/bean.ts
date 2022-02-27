@@ -68,7 +68,6 @@ export class Bean {
         this.p5.noStroke();
         if (!this.toIdle && !this.dead) this.state = KBeanActions.IDLE;
 
-        this.p5.imageMode(this.p5.CENTER);
         switch (this.state) {
             case KBeanActions.IDLE:
                 this.idleAnimation.play(this.pos);
