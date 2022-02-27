@@ -72,7 +72,7 @@ export const sketch = function (p5: P5) {
             case KStates.LOADING:
                 return;
             case KStates.START:
-                game.renderStartScreen(background);
+                game.renderStartScreen(background, bean);
                 break;
             case KStates.END:
                 game.renderRestartScreen(background, scoreBoard, bean);

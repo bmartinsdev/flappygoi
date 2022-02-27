@@ -60,6 +60,7 @@ export class Bean {
     }
 
     spawn() {
+        this.state = KBeanActions.IDLE;
         this.dead = false;
         this.pos = new Vector(-100, this.p5.height);
     }

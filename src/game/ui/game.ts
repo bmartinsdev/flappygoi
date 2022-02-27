@@ -46,11 +46,13 @@ export class Game {
         }
     }
 
-    renderStartScreen(background: Background) {
+    renderStartScreen(background: Background, bean: Bean) {
         // Clear canvas
         this.p5.background('#e1e6e8');
 
         background.update();
+
+        bean.update();
         this.p5.textSize(20);
         this.p5.fill("#000");
         this.p5.textAlign(this.p5.CENTER);
@@ -66,6 +68,7 @@ export class Game {
         this.p5.background('#e1e6e8');
 
         background.update();
+        bean.update();
         this.p5.textSize(20);
         this.p5.fill("#000");
         this.p5.textAlign(this.p5.CENTER);
