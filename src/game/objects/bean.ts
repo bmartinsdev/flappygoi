@@ -120,7 +120,8 @@ export class Bean {
     }
 
     lift() {
-        if (!(this.state in [KBeanActions.UNSUBSCRIBED, KBeanActions.SUBSCRIBED])) {
+        // In operator doesn't work with enums
+        if (this.state === KBeanActions.IDLE || this.state === KBeanActions.JUMP) {
             this.toIdle = 10;
             this.state = KBeanActions.JUMP;
         }
