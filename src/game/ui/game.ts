@@ -54,9 +54,9 @@ export class Game {
 
         bean.update();
         this.p5.textSize(20);
-        this.p5.fill("#000");
+        this.p5.fill("#CCCCCC80");
         this.p5.textAlign(this.p5.CENTER);
-        this.p5.text('ARROW UP OR TAP TO PLAY', this.p5.width / 2, this.p5.height / 2);
+        this.p5.text('TAP TO PLAY', this.p5.width / 2, this.p5.height / 2);
         if (this.delay < 0 && (this.p5.mouseIsPressed || this.p5.keyIsDown(this.p5.UP_ARROW))) {
             this.state = KStates.RUNNING;
         }
@@ -70,14 +70,12 @@ export class Game {
         background.update();
         bean.update();
         this.p5.textSize(20);
-        this.p5.fill("#000");
+        this.p5.fill("#CCCCCC80");
         this.p5.textAlign(this.p5.CENTER);
-        this.p5.text('ARROW UP OR TAP TO RESTART', this.p5.width / 2, this.p5.height / 2);
-        this.p5.textSize(15);
-        this.p5.text('CURRENT SCORE', this.p5.width / 2, this.p5.height / 2 + 30);
-        this.p5.text(score.score, this.p5.width / 2, this.p5.height / 2 + 45);
-        this.p5.text('HIGHEST SCORE', this.p5.width / 2, this.p5.height / 2 + 70);
-        this.p5.text(score.highestScore, this.p5.width / 2, this.p5.height / 2 + 85);
+        this.p5.text('TAP TO RESTART', this.p5.width / 2, this.p5.height / 2 + 45);
+        this.p5.textSize(50);
+        this.p5.fill("#04afdb");
+        this.p5.text(score.score, this.p5.width / 2, this.p5.height / 2);
         if (this.delay < 0 && (this.p5.mouseIsPressed || this.p5.keyIsDown(this.p5.UP_ARROW))) {
             this.resetSpeed();
             score.reset();

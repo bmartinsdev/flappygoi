@@ -40,7 +40,7 @@ export class ScoreBoard {
 
     draw() {
         this.p5.textSize(20);
-        this.p5.fill("#000");
+        this.p5.fill("#CCCCCC");
         this.p5.textAlign(this.p5.RIGHT);
         this.p5.text(this.score, this.p5.width - 50, 40);
         this.p5.image(this.subsSprite, this.p5.width - 30, 30, 20, 20);
