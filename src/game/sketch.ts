@@ -3,12 +3,13 @@ import 'p5/lib/addons/p5.sound';
 import { Bean } from './objects/bean';
 import { ScoreBoard } from "./ui/score";
 import { Subscribers } from "./objects/subscribers";
-import { gameEvents, gameSize } from "./shared/utils";
+import { gameEvents } from "./shared/utils";
 import { Spam } from './objects/spam';
 import { Background } from "./objects/background";
 import { Game, KStates } from "./ui/game";
 
 export const sketch = function (p5: P5) {
+    let element: HTMLElement;
     let bean: Bean;
     let spam: Spam;
     let background: Background;
@@ -46,12 +47,19 @@ export const sketch = function (p5: P5) {
 
     p5.setup = function () {
         p5.noLoop();
+        element = document.querySelector('flappy-goi').shadowRoot.querySelector('#game');
+
+        // Prevent right click on safari
+        element.oncontextmenu = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        };
+
         game = new Game(p5);
         loadAssets().then(() => {
-            const canvas = p5.createCanvas(gameSize().width, gameSize().height);
-            canvas.parent('game');
-
-            document.getElementById('preloader').classList.add('hidden');
+            p5.createCanvas(element.offsetWidth, element.offsetHeight);
+            document.querySelector('flappy-goi').shadowRoot.querySelector('#preloader').remove();
 
             p5.imageMode(p5.CENTER);
 
@@ -90,7 +98,7 @@ export const sketch = function (p5: P5) {
 
     // Handle window resize
     window.onresize = (e: UIEvent) => {
-        p5.resizeCanvas(gameSize().width, gameSize().height);
+        p5.resizeCanvas(element.offsetWidth, element.offsetHeight);
         bean.spawn();
     }
 

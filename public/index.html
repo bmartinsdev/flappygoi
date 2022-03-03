@@ -4,36 +4,22 @@
 <head>
 	<meta charset='utf-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<link rel='stylesheet' href='build/bundle.css?v=11012021'>
-
-	<script defer src='build/bundle.js?v=11012021'></script>
 </head>
 
 <body>
-	<div id="preloader">
-		<img src="assets/loader.svg" />
+	<div class="game">
+		<flappy-goi></flappy-goi>
 	</div>
 	<style>
-		#preloader {
-			display: flex;
-			position: absolute;
-			align-items: center;
-			justify-content: center;
-			background-color: #e1e6e8;
-			width: 100%;
-			height: 100%;
-			transition: opacity 500ms;
-			top: 0;
-		}
-
-		#preloader.hidden {
-			opacity: 0;
-		}
-
-		#p5_loading {
-			display: none;
+		.game {
+			width: 600px;
+			min-height: 400px;
+			max-width: 100%;
+			position: relative;
 		}
 	</style>
+
+	<script type="module" src="build/bundle.js?v=11012021"></script>
 </body>
 
 </html>
