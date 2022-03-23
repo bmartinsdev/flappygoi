@@ -8,6 +8,8 @@ import { Spam } from './objects/spam';
 import { Background } from "./objects/background";
 import { Game, KStates } from "./ui/game";
 
+const basePath = 'https://sandbox.bmartins.dev/flappy';
+
 export const sketch = function (p5: P5) {
     let element: HTMLElement;
     let bean: Bean;
@@ -152,35 +154,35 @@ export const sketch = function (p5: P5) {
         // @ts-ignore Wrong parameter format on ts type
         p5.soundFormats('ogg', 'mp3');
         loaders.push(new Promise((resolve, reject) => {
-            assets.bean.sounds.subscribe = p5.loadSound('assets/sound/subscribe.ogg', resolve, reject);
+            assets.bean.sounds.subscribe = p5.loadSound(`${basePath}/assets/sound/subscribe.ogg`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.bean.sounds.unsubscribe = p5.loadSound('assets/sound/unsubscribe.ogg', resolve, reject);
+            assets.bean.sounds.unsubscribe = p5.loadSound(`${basePath}/assets/sound/unsubscribe.ogg`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.bean.sprites.unsubscribed = p5.loadImage('assets/sprites/bean/hit.png', resolve, reject);
+            assets.bean.sprites.unsubscribed = p5.loadImage(`${basePath}/assets/sprites/bean/hit.png`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.bean.sprites.subscribe = p5.loadImage('assets/sprites/bean/eat.png', resolve, reject);
+            assets.bean.sprites.subscribe = p5.loadImage(`${basePath}/assets/sprites/bean/eat.png`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.bean.sprites.jump = p5.loadImage('assets/sprites/bean/jump.png', resolve, reject);
+            assets.bean.sprites.jump = p5.loadImage(`${basePath}/assets/sprites/bean/jump.png`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.spam.sprite = p5.loadImage('assets/sprites/spam.png', resolve, reject);
+            assets.spam.sprite = p5.loadImage(`${basePath}/assets/sprites/spam.png`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.ui.sprites.life = p5.loadImage('assets/sprites/life.png', resolve, reject);
+            assets.ui.sprites.life = p5.loadImage(`${basePath}/assets/sprites/life.png`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.subscriber.sprite = p5.loadImage('assets/sprites/subscriber.png', resolve, reject);
+            assets.subscriber.sprite = p5.loadImage(`${basePath}/assets/sprites/subscriber.png`, resolve, reject);
         }));
         loaders.push(new Promise((resolve, reject) => {
-            assets.background.sprite = p5.loadImage('assets/sprites/background.png', resolve, reject);
+            assets.background.sprite = p5.loadImage(`${basePath}/assets/sprites/background.png`, resolve, reject);
         }));
         for (let i = 1; i <= 3; i++) {
             loaders.push(new Promise((resolve, reject) => {
-                assets.bean.sprites.idle.push(p5.loadImage(`assets/sprites/bean/idle_0${i}.png`, resolve, reject));
+                assets.bean.sprites.idle.push(p5.loadImage(`${basePath}/assets/sprites/bean/idle_0${i}.png`, resolve, reject));
             }));
         }
 

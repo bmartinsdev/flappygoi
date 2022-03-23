@@ -8,12 +8,7 @@
 
 	onMount(() => {
 		game = new P5(sketch, gameElement);
-		window.onresize = onWindowResize;
 	});
-
-	function onWindowResize(e: UIEvent) {
-		game.resizeCanvas(window.innerWidth, window.innerHeight);
-	}
 </script>
 
 <div class="holder">
@@ -28,6 +23,8 @@
 <style>
 	.holder {
 		position: relative;
+		width: 100%;
+		height: 100%;
 	}
 	#preloader {
 		display: flex;
