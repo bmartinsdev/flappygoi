@@ -102,7 +102,7 @@ export class Bean {
             this.velocity = 0;
         }
         if (!this.dead) {
-            if (this.p5.mouseIsPressed || this.p5.keyIsDown(this.p5.UP_ARROW)) {
+            if (this.p5.mouseIsPressed || this.p5.keyIsDown(87)) {
                 this.lift();
             }
         }

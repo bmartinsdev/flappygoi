@@ -7,13 +7,12 @@
 </head>
 
 <body>
-	<div class="game">
-		<flappy-goi></flappy-goi>
+	<div id="flappy-game">
 	</div>
 	<style>
-		.game {
+		#flappy-game {
 			width: 100%;
-			height: 100vh;
+			height: 100%;
 			max-width: 100%;
 			position: relative;
 		}
@@ -22,8 +21,16 @@
 			margin: 0;
 		}
 	</style>
-
-	<script type="module" src="flappy.js?v=11012021"></script>
+	<script>
+		var link = document.createElement('script');
+		link.setAttribute('type', 'module');
+		link.setAttribute('src', 'flappy.js?v=11012021');
+		link.onload = function () {
+			const game = document.getElementById('flappy-game');
+			game.appendChild(document.createElement('flappy-goi'));
+		};
+		document.getElementsByTagName("BODY")[0].appendChild(link);
+	</script>
 </body>
 
 </html>

@@ -8,10 +8,11 @@ import { Spam } from './objects/spam';
 import { Background } from "./objects/background";
 import { Game, KStates } from "./ui/game";
 
-const basePath = 'https://sandbox.bmartins.dev/flappy';
+const basePath = 'https://sandbox.bmartins.dev/flappy/';
 
 export const sketch = function (p5: P5) {
     let element: HTMLElement;
+    let eventController = new AbortController();
     let bean: Bean;
     let spam: Spam;
     let background: Background;
@@ -49,7 +50,7 @@ export const sketch = function (p5: P5) {
 
     p5.setup = function () {
         p5.noLoop();
-        element = document.querySelector('flappy-goi').shadowRoot.querySelector('#game');
+        element = document.querySelector('flappy-goi').shadowRoot.querySelector('#flappy-game');
 
         // Prevent right click on safari
         element.oncontextmenu = (event) => {
@@ -99,10 +100,15 @@ export const sketch = function (p5: P5) {
     }
 
     // Handle window resize
-    window.onresize = (e: UIEvent) => {
+    window.addEventListener('resize', (e: UIEvent) => {
         p5.resizeCanvas(element.offsetWidth, element.offsetHeight);
         bean.spawn();
-    }
+    }, { signal: eventController.signal });
+
+    window.addEventListener('hashchange', () => {
+        p5.remove();
+        eventController.abort();
+    }, { signal: eventController.signal });
 
     // Render game
     function renderGame() {

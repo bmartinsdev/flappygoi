@@ -17,7 +17,7 @@
 	</div>
 	<div id="p5_loading" />
 	<div class="p5Canvas" />
-	<div id="game" bind:this={gameElement} />
+	<div id="flappy-game" bind:this={gameElement} />
 </div>
 
 <style>
@@ -40,7 +40,7 @@
 	#p5_loading {
 		display: none;
 	}
-	#game {
+	#flappy-game {
 		width: 100%;
 		height: 100%;
 		min-height: 500px;
